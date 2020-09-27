@@ -2,6 +2,7 @@
 members = [
   "websockets/websockets",
   "protocol",
+  "websockets2",
   "client",
 ]
 

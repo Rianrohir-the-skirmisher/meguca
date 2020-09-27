@@ -27,17 +27,23 @@ where
 		self.0.entry(k).or_default().insert(v);
 	}
 
-	pub fn remove(&mut self, k: &K, v: &V) {
+	pub fn remove(&mut self, k: &K, v: &V) -> bool {
+		let mut removed = false;
 		if let Some(set) = self.0.get_mut(k) {
-			set.remove(v);
-			if set.len() == 0 {
+			removed = set.remove(v);
+			if set.is_empty() {
 				self.0.remove(k);
 			}
 		}
+		removed
 	}
 
 	pub fn get(&self, k: &K) -> Option<&HashSet<V>> {
 		self.0.get(k)
+	}
+
+	pub fn get_mut(&mut self, k: &K) -> Option<&mut HashSet<V>> {
+		self.0.get_mut(k)
 	}
 
 	pub fn clear(&mut self) {
@@ -56,6 +62,10 @@ where
 
 	pub fn values(&self) -> impl Iterator<Item = &V> {
 		self.0.values().map(|s| s.iter()).flatten()
+	}
+
+	pub fn is_empty(&self) -> bool {
+		self.0.is_empty()
 	}
 }
 
